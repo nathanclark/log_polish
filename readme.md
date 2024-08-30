@@ -60,6 +60,46 @@ Options:
 3. You can review, accept, update, or skip each suggested message.
 4. Accepted messages are automatically applied to your Git history.
 
+## 🗑️ Uninstallation
+
+You can uninstall LogPolish either manually or by using the provided uninstall script.
+
+### Manual Uninstallation
+
+1. Remove the LogPolish directory:
+
+   ```
+   rm -rf /path/to/logpolish
+   ```
+
+2. Remove the .env file if you want to delete your API keys:
+
+   ```
+   rm /path/to/.env
+   ```
+
+3. Optionally, uninstall the dependencies if you don't need them for other projects:
+   ```
+   pip uninstall -r requirements.txt -y
+   ```
+
+### Automated Uninstallation
+
+We provide an `uninstall.py` script for easy removal of LogPolish:
+
+1. Navigate to the LogPolish directory:
+
+   ```
+   cd /path/to/logpolish
+   ```
+
+2. Run the uninstall script:
+   ```
+   python uninstall.py
+   ```
+
+This script will remove the LogPolish files, the .env file, and optionally uninstall the dependencies.
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
