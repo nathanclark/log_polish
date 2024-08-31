@@ -5,7 +5,7 @@
 
 Elevate your Git history with LogPolish - the intelligent CLI tool that transforms your commit messages using the power of AI!
 
-![LogPolish Demo](https://via.placeholder.com/600x300.png?text=LogPolish+Demo+GIF)
+![LogPolish Demo](docs/assets/demo.gif)
 
 ## 🚀 Features
 
