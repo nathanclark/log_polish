@@ -1,4 +1,4 @@
-# 🌟 LogPolish: AI-Powered Git Commit Message Enhancer
+# 🌟 LogPolish: AI-Powered Git Commit Message
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
@@ -238,6 +238,6 @@ This script will remove the LogPolish files, the .env file, and optionally unins
 
 ---
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by Nathan
 
 Give your Git logs a polish with LogPolish! ✨
