@@ -1,11 +1,15 @@
-from dotenv import load_dotenv, set_key
-import git
-from rich.syntax import Syntax
-from rich.panel import Panel
-from rich.console import Console
-import click
 import sys
 import os
+import subprocess
+import tempfile
+import click
+from rich.console import Console
+from rich.panel import Panel
+from rich.syntax import Syntax
+import git
+from dotenv import load_dotenv, set_key
+
+console = Console()
 
 
 def check_libraries():
@@ -32,9 +36,6 @@ def check_libraries():
 
 
 check_libraries()
-
-
-console = Console()
 
 
 def setup_env_file():
@@ -208,13 +209,48 @@ def show_diff(commit):
 
 def update_commit_message(repo, commit, new_message):
     try:
-        repo.git.commit('--amend', '-m', new_message)
+        # Get the commit hash
+        commit_hash = commit.hexsha
+
+        # Create a script for interactive rebase
+        script_content = f"""
+if ($args[0] -eq '{commit_hash}') {{
+    Write-Output "edit $($args[1]) Updating commit message"
+}} else {{
+    $commitMsg = & git log --format=%s -n 1 $args[1]
+    Write-Output "pick $($args[1]) $commitMsg"
+}}
+"""
+        # Create a temporary file
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.ps1') as temp_file:
+            temp_file.write(script_content)
+            temp_script_path = temp_file.name
+
+        # Start interactive rebase
+        rebase_command = f'git rebase -i {commit_hash}^ --exec "powershell -File {temp_script_path} $1 $2"'
+        subprocess.run(rebase_command, shell=True, cwd=repo.working_dir)
+
+        # Amend the commit with the new message
+        subprocess.run(['git', 'commit', '--amend', '-m',
+                       new_message], cwd=repo.working_dir)
+
+        # Continue the rebase
+        subprocess.run(['git', 'rebase', '--continue'],
+                       input=b'\n', cwd=repo.working_dir)
+
         console.print(
-            f"[bold green]Successfully updated commit {commit.hexsha[:7]} with new message:[/bold green]")
+            f"[bold green]Successfully updated commit {commit_hash[:7]} with new message:[/bold green]")
         console.print(Panel(new_message, border_style="green"))
-    except git.GitCommandError as e:
+
+    except subprocess.CalledProcessError as e:
         console.print(
             f"[bold red]Error updating commit message: {e}[/bold red]")
+        console.print(
+            "You may need to resolve conflicts manually and run 'git rebase --continue'")
+
+    finally:
+        # Clean up the temporary script
+        os.unlink(temp_script_path)
 
 
 def main():
