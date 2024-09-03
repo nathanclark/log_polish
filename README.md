@@ -46,7 +46,7 @@ Choose 'Y' when prompted.
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/logpolish.git
+   git clone https://github.com/nathanclark/logpolish.git
    cd logpolish
    ```
 
